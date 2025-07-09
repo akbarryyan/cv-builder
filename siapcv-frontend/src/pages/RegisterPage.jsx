@@ -1,8 +1,9 @@
 import { useState } from "react";
+import axios from "axios";
 import { FileText, Mail, Lock, Eye, EyeOff, ShieldCheck } from "lucide-react";
 import toast, { Toaster } from "react-hot-toast";
 
-const API_URL = "http://localhost:3001/api/register";
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3001";
 
 const RegisterPage = ({ onSwitchToLogin, onRegister }) => {
   const [formData, setFormData] = useState({
@@ -72,26 +73,24 @@ const RegisterPage = ({ onSwitchToLogin, onRegister }) => {
     setIsLoading(true);
 
     try {
-      const res = await fetch(API_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          firstName: formData.firstName,
-          lastName: formData.lastName,
-          email: formData.email,
-          password: formData.password,
-        }),
+      const res = await axios.post(`${API_URL}/api/register`, {
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        email: formData.email,
+        password: formData.password,
       });
-      const data = await res.json();
-
-      if (!res.ok) {
-        toast.error(data.message || "Registration failed");
-      } else {
+      if (res.data && res.data.token && res.data.user) {
+        localStorage.setItem("token", res.data.token);
+        localStorage.setItem("user", JSON.stringify(res.data.user));
         toast.success("Registration successful! 🎉");
         onRegister && onRegister();
+      } else {
+        toast.error(res.data.message || "Registration failed");
       }
-    } catch {
-      toast.error("Server error, please try again later.");
+    } catch (err) {
+      toast.error(
+        err.response?.data?.message || "Server error, please try again later."
+      );
     }
     setIsLoading(false);
   };

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import axios from "axios";
 import {
   FileText,
   Mail,
@@ -8,6 +9,8 @@ import {
   UsersRound,
 } from "lucide-react";
 
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3001";
+
 const LoginPage = ({ onSwitchToRegister, onLogin }) => {
   const [formData, setFormData] = useState({
     email: "",
@@ -16,6 +19,7 @@ const LoginPage = ({ onSwitchToRegister, onLogin }) => {
   });
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -28,12 +32,24 @@ const LoginPage = ({ onSwitchToRegister, onLogin }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-
-    // Simulate API call
-    setTimeout(() => {
+    setError("");
+    try {
+      const response = await axios.post(`${API_URL}/api/login`, {
+        email: formData.email,
+        password: formData.password,
+      });
+      // Simpan token ke localStorage
+      localStorage.setItem("token", response.data.token);
+      // (Opsional) Simpan data user ke localStorage
+      localStorage.setItem("user", JSON.stringify(response.data.user));
       setIsLoading(false);
-      onLogin();
-    }, 1500);
+      onLogin && onLogin(response.data.user);
+    } catch (err) {
+      setIsLoading(false);
+      setError(
+        err.response?.data?.message || "Login failed, please try again."
+      );
+    }
   };
 
   return (
@@ -142,6 +158,13 @@ const LoginPage = ({ onSwitchToRegister, onLogin }) => {
                 Forgot password?
               </a>
             </div>
+
+            {/* Error Message */}
+            {error && (
+              <div className="text-red-500 text-sm text-center font-medium">
+                {error}
+              </div>
+            )}
 
             {/* Submit Button */}
             <button

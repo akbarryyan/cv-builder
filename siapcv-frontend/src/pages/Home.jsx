@@ -6,8 +6,26 @@ import ProgressSection from "../components/user/ProgressSection";
 import TemplatesSection from "../components/user/TemplatesSection";
 import Footer from "../components/user/Footer";
 import { FileText, Palette, Eye, Briefcase } from "lucide-react";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 function Home() {
+  const [user, setUser] = useState(null);
+  const [token, setToken] = useState("");
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    // Ambil user dan token dari localStorage
+    const userData = localStorage.getItem("user");
+    const tokenData = localStorage.getItem("token");
+    if (userData) setUser(JSON.parse(userData));
+    if (tokenData) setToken(tokenData);
+    // Jika belum login, redirect ke /login
+    if (!userData || !tokenData) {
+      navigate("/login");
+    }
+  }, [navigate]);
+
   const statsData = [
     {
       title: "CVs Created",
@@ -61,7 +79,10 @@ function Home() {
             {/* Welcome Banner */}
             <div className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-xl p-6 mb-6 relative overflow-hidden">
               <div className="relative z-10">
-                <h2 className="text-2xl font-bold mb-2">Welcome back, John!</h2>
+                <h2 className="text-2xl font-bold mb-2">
+                  Welcome back
+                  {user ? `, ${user.firstName} ${user.lastName}!` : ", Guest!"}
+                </h2>
                 <p className="mb-4 opacity-90">
                   Ready to create your next amazing resume?
                 </p>
