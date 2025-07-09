@@ -1,5 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import {
   FileText,
   Mail,
@@ -8,6 +9,7 @@ import {
   Clock,
   UsersRound,
 } from "lucide-react";
+import toast from "react-hot-toast";
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3001";
 
@@ -20,6 +22,7 @@ const LoginPage = ({ onSwitchToRegister, onLogin }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
+  const navigate = useNavigate();
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -43,7 +46,11 @@ const LoginPage = ({ onSwitchToRegister, onLogin }) => {
       // (Opsional) Simpan data user ke localStorage
       localStorage.setItem("user", JSON.stringify(response.data.user));
       setIsLoading(false);
-      onLogin && onLogin(response.data.user);
+      toast.success("Login successful!");
+      setTimeout(() => {
+        onLogin && onLogin(response.data.user);
+        navigate("/home");
+      }, 700);
     } catch (err) {
       setIsLoading(false);
       setError(
