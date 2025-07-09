@@ -1,7 +1,7 @@
-const bcrypt = require("bcryptjs");
-const pool = require("../config/db");
+import bcrypt from "bcryptjs";
+import pool from "../config/db.js";
 
-exports.register = async (req, res) => {
+export const register = async (req, res) => {
   const { firstName, lastName, email, password } = req.body;
 
   if (!firstName || !lastName || !email || !password) {
