@@ -5,6 +5,7 @@ import RegisterPage from "./pages/RegisterPage.jsx";
 import HomePage from "./pages/Home.jsx";
 import CVSelectionPage from "./pages/CVSelectionPage.jsx";
 import CVFormPage from "./pages/CVFormPage.jsx";
+import PreviewPage from "./pages/PreviewPage.jsx";
 
 export default function AppRouter() {
   return (
@@ -17,6 +18,7 @@ export default function AppRouter() {
         <Route path="/cv-builder" element={<CVSelectionPage />} />
         <Route path="/cv-builder/new" element={<CVFormPage />} />
         <Route path="/cv-builder/:cvId" element={<CVFormPage />} />
+        <Route path="/preview/:cvId" element={<PreviewPage />} />
       </Routes>
     </Router>
   );
