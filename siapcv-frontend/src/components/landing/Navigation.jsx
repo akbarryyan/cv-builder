@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 
 const Navigation = () => {
@@ -74,18 +75,18 @@ const Navigation = () => {
           </div>
 
           <div className="flex items-center space-x-4">
-            <a
-              href="#"
+            <Link
+              to="/login"
               className="text-primary hover:text-primary/80 transition duration-300"
             >
               Masuk
-            </a>
-            <a
-              href="#"
+            </Link>
+            <Link
+              to="/register"
               className="bg-primary text-white px-6 py-2 rounded-full hover:bg-primary/90 transition duration-300 transform hover:scale-105"
             >
               Mulai Gratis
-            </a>
+            </Link>
           </div>
 
           <div className="md:hidden">
