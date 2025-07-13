@@ -6,11 +6,16 @@ import {
   Settings,
   CircleUserRound,
   ChevronDown,
+  ArrowLeft,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 
-const Navbar = () => {
+const Navbar = ({
+  showBackButton = false,
+  backButtonText = "Back",
+  backButtonPath = "/",
+}) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [user, setUser] = useState(null);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
@@ -43,6 +48,15 @@ const Navbar = () => {
             </span>
           </div>
           <div className="flex items-center space-x-2 sm:space-x-3 mt-2 sm:mt-0">
+            {showBackButton && (
+              <button
+                onClick={() => navigate(backButtonPath)}
+                className="flex items-center space-x-1 px-2 py-1 text-gray-600 hover:text-purple-600 hover:bg-purple-50 rounded-lg transition-colors text-sm"
+              >
+                <ArrowLeft size={16} />
+                <span className="hidden sm:inline">{backButtonText}</span>
+              </button>
+            )}
             <div className="relative">
               <button className="p-2 rounded-full hover:bg-purple-50 transition-colors group focus:outline-none">
                 <Bell className="text-purple-600 group-hover:text-purple-800" />

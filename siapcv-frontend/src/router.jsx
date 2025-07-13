@@ -1,25 +1,23 @@
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import LandingPage from "./pages/LandingPage";
 import LoginPage from "./pages/LoginPage.jsx";
 import RegisterPage from "./pages/RegisterPage.jsx";
 import HomePage from "./pages/Home.jsx";
-// import AdminDashboard from "./admin/pages/Dashboard.jsx";
-// import NotFoundPage from "./pages/NotFound.jsx";
+import CVSelectionPage from "./pages/CVSelectionPage.jsx";
+import CVFormPage from "./pages/CVFormPage.jsx";
 
 export default function AppRouter() {
   return (
-    <BrowserRouter>
+    <Router>
       <Routes>
-        {/* Landing page */}
         <Route path="/" element={<LandingPage />} />
-
-        {/* Contoh route lain: aktifkan jika sudah ada file-nya */}
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/home" element={<HomePage />} />
-        {/* <Route path="/admin" element={<AdminDashboard />} /> */}
-        {/* <Route path="*" element={<NotFoundPage />} /> */}
+        <Route path="/cv-builder" element={<CVSelectionPage />} />
+        <Route path="/cv-builder/new" element={<CVFormPage />} />
+        <Route path="/cv-builder/:cvId" element={<CVFormPage />} />
       </Routes>
-    </BrowserRouter>
+    </Router>
   );
 }

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import axios from "axios";
+import { authAPI } from "../services/api.js";
 import { useNavigate } from "react-router-dom";
 import {
   FileText,
@@ -11,8 +11,6 @@ import {
 } from "lucide-react";
 import toast from "react-hot-toast";
 
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3001";
-
 const LoginPage = ({ onSwitchToRegister, onLogin }) => {
   const [formData, setFormData] = useState({
     email: "",
@@ -21,7 +19,6 @@ const LoginPage = ({ onSwitchToRegister, onLogin }) => {
   });
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState("");
   const navigate = useNavigate();
 
   const handleInputChange = (e) => {
@@ -35,25 +32,22 @@ const LoginPage = ({ onSwitchToRegister, onLogin }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-    setError("");
     try {
-      const response = await axios.post(`${API_URL}/api/login`, {
-        email: formData.email,
-        password: formData.password,
-      });
+      const response = await authAPI.login(formData.email, formData.password);
+
       // Simpan token ke localStorage
-      localStorage.setItem("token", response.data.token);
+      localStorage.setItem("token", response.token);
       // (Opsional) Simpan data user ke localStorage
-      localStorage.setItem("user", JSON.stringify(response.data.user));
+      localStorage.setItem("user", JSON.stringify(response.user));
       setIsLoading(false);
       toast.success("Login successful!");
       setTimeout(() => {
-        onLogin && onLogin(response.data.user);
+        onLogin && onLogin(response.user);
         navigate("/home");
       }, 700);
     } catch (err) {
       setIsLoading(false);
-      setError(
+      toast.error(
         err.response?.data?.message || "Login failed, please try again."
       );
     }
@@ -165,13 +159,6 @@ const LoginPage = ({ onSwitchToRegister, onLogin }) => {
                 Forgot password?
               </a>
             </div>
-
-            {/* Error Message */}
-            {error && (
-              <div className="text-red-500 text-sm text-center font-medium">
-                {error}
-              </div>
-            )}
 
             {/* Submit Button */}
             <button

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>TEST</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        padding: 20px;
+        background-color: lightblue;
+      }
+      h1 {
+        color: red;
+        font-size: 36px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>STATIC TEST PAGE</h1>
+    <p>
+      If you can see this blue background and red text, the server is working!
+    </p>
+    <p>Date: <span id="date"></span></p>
+
+    <script>
+      document.getElementById("date").innerHTML = new Date().toString();
+      console.log("Static page loaded successfully");
+    </script>
+  </body>
+</html>
